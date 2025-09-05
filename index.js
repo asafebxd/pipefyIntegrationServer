@@ -1,29 +1,12 @@
-import { configDotenv } from "dotenv";
-configDotenv({ path: "./.env" });
+import { pipefy } from "./controllers/pipefy.js";
+import { orchestrator } from "./orchestrator.js";
 
-const API_TOKEN = process.env.API_TOKEN;
+const pipeId = 306529415;
 
-async function fetchPipefyData() {
-  const res = await fetch("https://api.pipefy.com/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${API_TOKEN}`,
-    },
-    body: JSON.stringify({
-      query: `
-        {
-          organizations {
-            id
-            name
-          }
-        }
-      `,
-    }),
-  });
+const startFormFields = await orchestrator.fetchFieldsData(pipeId);
 
-  const resBody = await res.json();
-  console.log(JSON.stringify(resBody));
-}
+const createResponse = await pipefy.createNewCard(pipeId);
 
-fetchPipefyData().catch(console.error);
+console.log("start form fields:", startFormFields);
+
+console.log("Create New Card Response:", createResponse);
