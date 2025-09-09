@@ -1,12 +1,15 @@
 import { pipefy } from "./controllers/pipefy.js";
-import { orchestrator } from "./orchestrator.js";
+import { gptMaker } from "./controllers/gptMaker.js";
 
 const pipeId = 306529415;
+const intentions = await gptMaker.getAgentIntentions();
 
-const startFormFields = await orchestrator.fetchFieldsData(pipeId);
+const worksapcesId = await gptMaker.getWorkspaceId();
 
-const createResponse = await pipefy.createNewCard(pipeId);
+const agent = await gptMaker.getAgentId(worksapcesId);
 
-console.log("start form fields:", startFormFields);
+console.log(agent);
 
-console.log("Create New Card Response:", createResponse);
+// console.log("start form fields:", startFormFields);
+
+// console.log("Create New Card Response:", createResponse);
