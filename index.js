@@ -1,12 +1,23 @@
 import { pipefy } from "./controllers/pipefy.js";
-import { orchestrator } from "./orchestrator.js";
+import { gptMaker } from "./controllers/gptMaker.js";
+import { rdStation } from "./controllers/rdStation.js";
+
+// Refresh RD Token every 24h
+await rdStation.refreshAccessToken();
 
 const pipeId = 306529415;
 
-const startFormFields = await orchestrator.fetchFieldsData(pipeId);
+// const worksapcesId = await gptMaker.getWorkspaceId();
+// const agentId = await gptMaker.getAgentId(worksapcesId);
 
-const createResponse = await pipefy.createNewCard(pipeId);
+// const intentions = await gptMaker.getAgentIntentionsById(agentId);
 
-console.log("start form fields:", startFormFields);
+// console.log(intentions, agentId);
 
-console.log("Create New Card Response:", createResponse);
+// console.log("start form fields:", startFormFields);
+
+// console.log("Create New Card Response:", createResponse);
+
+const accessToken = rdStation.getAccessToken();
+
+console.log("Access Token:", accessToken);
