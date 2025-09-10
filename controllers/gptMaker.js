@@ -7,10 +7,11 @@ async function getWorkspaceId() {
   const res = await fetch("https://api.gptmaker.ai/v2/workspaces", {
     method: "GET",
     headers: {
-      Content_Type: "application/json",
+      "Content-Type": "application/json",
       Authorization: `Bearer ${MAKER_TOKEN}`,
     },
   });
+  console.log("Status code: ", res.status);
 
   const resBody = await res.json();
 
@@ -29,35 +30,38 @@ async function getAgentId(workspaceId) {
     {
       method: "GET",
       headers: {
-        Content_Type: "application/json",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${MAKER_TOKEN}`,
       },
     }
   );
 
-  console.log(res.status);
+  console.log("Status code: ", res.status);
 
-  const resBody = res.json();
+  const resBody = await res.json();
 
-  return resBody;
+  const agent = resBody.data.map((agent) => {
+    if (agent.name === "Gioppo e Conti") {
+      return agent.id;
+    }
+  });
+
+  return agent[0];
 }
 
-async function getAgentIntentions() {
-  const worksapcesId = getWorkspaceId();
-  const agentId = "3E6AF98EF543E0A9A19A0E5D41267B31";
-
+async function getAgentIntentionsById(agentId) {
   const res = await fetch(
     `https://api.gptmaker.ai/v2/agent/${agentId}/intentions`,
     {
       method: "GET",
       headers: {
-        Content_Type: "authentication/json",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${MAKER_TOKEN}`,
       },
     }
   );
 
-  console.log(res.status);
+  console.log("Status code: ", res.status);
 
   const resBody = await res.json();
 
@@ -67,5 +71,5 @@ async function getAgentIntentions() {
 export const gptMaker = {
   getWorkspaceId,
   getAgentId,
-  getAgentIntentions,
+  getAgentIntentionsById,
 };
