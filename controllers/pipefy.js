@@ -30,7 +30,7 @@ async function fetchFieldsData(pipeId) {
       `,
     }),
   });
-  console.log("Fetch Status ", res.status);
+  console.log("Status code: ", res.status);
 
   const resBody = await res.json();
 
@@ -65,7 +65,7 @@ async function createNewCard(pipeId) {
       `,
     }),
   });
-  console.log("Create Status ", res.status);
+  console.log("Status code: ", res.status);
 
   const resBody = await res.json();
 
