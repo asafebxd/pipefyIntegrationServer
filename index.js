@@ -20,4 +20,9 @@ const pipeId = 306529415;
 
 const accessToken = rdStation.getAccessToken();
 
-console.log("Access Token:", accessToken);
+const webhooks = await rdStation.getRDWebhooks(accessToken);
+const postResponse = await rdStation.postRDWebhook(accessToken);
+
+console.log("Post:", postResponse);
+
+console.log("Webhooks:", webhooks);
