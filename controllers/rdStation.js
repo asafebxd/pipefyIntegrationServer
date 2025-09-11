@@ -82,10 +82,71 @@ async function postRDWebhook(accessToken) {
   return resBody.webhooks;
 }
 
+async function getLeadsList(acessTokem, segmentId) {
+  const res = await fetch(
+    `https://api.rd.services/platform/segmentations/${segmentId}/contacts`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${acessTokem}`,
+      },
+    }
+  );
+  console.log("Status code:", res.status);
+
+  const resBody = await res.json();
+
+  const contacts = resBody.contacts;
+
+  return contacts;
+}
+
+async function getLeadById(acessToken, leadId) {
+  const res = await fetch(
+    `https://api.rd.services/platform/contacts/uuid:${leadId}`,
+    {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${acessToken}`,
+      },
+    }
+  );
+
+  console.log("Status code:", res.status);
+
+  const resBody = res.json();
+
+  return resBody;
+}
+
+async function getLeadOriginById(acessToken, leadId) {
+  const res = await fetch(
+    `https://api.rd.services/platform/contacts/uuid:${leadId}/funnels/default`,
+    {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${acessToken}`,
+      },
+    }
+  );
+
+  console.log("Status code: ", res.status);
+
+  const resBody = await res.json();
+
+  return resBody.origin;
+}
+
 export const rdStation = {
   generateAccessToken,
   refreshAccessToken,
   getRDWebhooks,
   postRDWebhook,
+  getLeadsList,
+  getLeadById,
+  getLeadOriginById,
   getAccessToken: () => RD_ACCESS_TOKEN,
 };
