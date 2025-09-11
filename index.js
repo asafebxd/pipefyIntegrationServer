@@ -27,13 +27,16 @@ const leadObject = {
     se_sim_quem_seria: lead.cf_se_sim_quem_seria,
     ja_tem_alguma_documentacao_dele: lead.cf_ja_tem_alguma_documentacao_dele,
     voce_sabe_quem_e_o_portugues_da_sua_familia:
-      lead.cf_voce_sabe_quem_e_o_portugues_da_sua_familia,
+      lead.cf_voce_sabe_quem_e_o_portugues_da_sua_familia || "Nao",
     voce_ja_conhece_como_e_um_processo_da_busca_da_cidadania:
-      lead.cf_voce_ja_conhece_como_e_um_processo_da_busca_da_cidadania_0,
+      lead.cf_voce_ja_conhece_como_e_um_processo_da_busca_da_cidadania_0 ||
+      "Nao",
     busca_a_cidadania_somente_para_voce_ou_tem_mais_familiar:
-      lead.cf_busca_a_cidadania_somente_para_voce_ou_tem_mais_familiar,
+      lead.cf_busca_a_cidadania_somente_para_voce_ou_tem_mais_familiar || "Nao",
   },
   origin: leadOrigin,
 };
 
-console.log(leadObject.answer);
+console.log(leadObject);
+
+// console.log(accessToken);
