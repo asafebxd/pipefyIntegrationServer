@@ -2,41 +2,158 @@ import { pipefy } from "./controllers/pipefy.js";
 import { gptMaker } from "./controllers/gptMaker.js";
 import { rdStation } from "./controllers/rdStation.js";
 
+import { configDotenv } from "dotenv";
+configDotenv({ path: "./.env" });
+
+const API_TOKEN = process.env.API_TOKEN;
+
 // Refresh RD Token every 24h
 await rdStation.refreshAccessToken();
 
 const accessToken = rdStation.getAccessToken();
 
-const pipeId = 306529415;
+const pipeId = 306505374;
 const segmentId = 17086323;
 
-const leadsList = await rdStation.getLeadsList(accessToken, segmentId);
-
-const leadId = leadsList[0].uuid;
-
-const lead = await rdStation.getLeadById(accessToken, leadId);
-
-const leadOrigin = await rdStation.getLeadOriginById(accessToken, leadId);
-
-console.log("leadOrigin:", leadOrigin);
+const pipeFields = await pipefy.fetchFieldsData(pipeId);
 
 const leadObject = {
-  name: lead.name,
-  email: lead.email,
-  answer: {
-    se_sim_quem_seria: lead.cf_se_sim_quem_seria,
-    ja_tem_alguma_documentacao_dele: lead.cf_ja_tem_alguma_documentacao_dele,
-    voce_sabe_quem_e_o_portugues_da_sua_familia:
-      lead.cf_voce_sabe_quem_e_o_portugues_da_sua_familia || "Nao",
-    voce_ja_conhece_como_e_um_processo_da_busca_da_cidadania:
-      lead.cf_voce_ja_conhece_como_e_um_processo_da_busca_da_cidadania_0 ||
-      "Nao",
-    busca_a_cidadania_somente_para_voce_ou_tem_mais_familiar:
-      lead.cf_busca_a_cidadania_somente_para_voce_ou_tem_mais_familiar || "Nao",
-  },
-  origin: leadOrigin,
+  name: "API Test",
+  phoneNumber: "+551399998888",
+  campaign: ["Não identificado"],
+  service: ["CI"],
+  firstQuestion: "Nao",
+  numberOfApplicants: 2,
+  SDRConsultant: ["306844193"],
+  info: "Criando novo Card via API",
+  email: "teste@testeAPIcall2.com",
+  firstContact: "2025-09-12",
+  label: ["316554221"],
+  meet: [],
 };
 
-console.log(leadObject);
+const cardCreated = await pipefy.createNewCard(pipeId, leadObject);
+
+console.log(cardCreated);
 
 // console.log(accessToken);
+
+start_form_fields: [
+  {
+    id: "nome",
+    required: false,
+    label: "Nome cliente ",
+    type: "short_text",
+    options: [],
+  },
+  {
+    id: "telefone",
+    required: true,
+    label: "Telefone:",
+    type: "phone",
+    options: [],
+  },
+  {
+    id: "tipo_de_campanha_1",
+    required: false,
+    label: "Tipo de Campanha",
+    type: "checklist_horizontal",
+    options: [Array],
+  },
+  {
+    id: "tipo_de_servi_o_1",
+    required: true,
+    label: "Tipo de Serviço",
+    type: "radio_horizontal",
+    options: [Array],
+  },
+  {
+    id: "quem_o_italiano",
+    required: false,
+    label: "Quem é o dante causa",
+    type: "short_text",
+    options: [],
+  },
+  {
+    id: "quantidade_de_requerentes",
+    required: false,
+    label: "Quantidade de requerentes",
+    type: "number",
+    options: [],
+  },
+  {
+    id: "documenta_es",
+    required: false,
+    label: "Documentações",
+    type: "attachment",
+    options: [],
+  },
+  {
+    id: "consultor_sdr",
+    required: true,
+    label: "Consultor SDR",
+    type: "assignee_select",
+    options: [],
+  },
+  {
+    id: "informa_es",
+    required: true,
+    label: "Informações",
+    type: "long_text",
+    options: [],
+  },
+  {
+    id: "email",
+    required: false,
+    label: "Email:",
+    type: "email",
+    options: [],
+  },
+  {
+    id: "data_do_primeiro_contato",
+    required: true,
+    label: "Data do primeiro contato",
+    type: "date",
+    options: [],
+  },
+  {
+    id: "sele_o_de_etiqueta",
+    required: false,
+    label: "Seleção de etiqueta",
+    type: "label_select",
+    options: [],
+  },
+  {
+    id: "reuni_o",
+    required: false,
+    label: "Reunião",
+    type: "radio_vertical",
+    options: [Array],
+  },
+];
+
+// const tipoDeCampanha = [
+//   "Instagram ADS",
+//   "Instagram Orgânico",
+//   "Tik Tok Orgânico",
+//   "Te Amo Orgânico",
+//   "Eletromidia Baixada Santista",
+//   "Eletromidia Jundiaí",
+//   "Link da Bio",
+//   "Site Oficial",
+//   "Whatsapp-PQ MIX",
+//   "Forms Mês do Cliente",
+//   "Forms VS2",
+//   "LP-Fábio",
+//   "Google",
+//   "Campanha Facebook",
+//   "Campanha Maria Joana",
+//   "Meta ADS-Cidadania Portuguesa",
+//   "Indicação",
+//   "LP-Luiza",
+//   "Promo Familia PF",
+//   "Euro Congelado/Preço",
+//   "Formulário",
+//   "Não identificado",
+//   "Webnario",
+// ];
