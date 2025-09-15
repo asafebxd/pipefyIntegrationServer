@@ -5,36 +5,41 @@ import { rdStation } from "./controllers/rdStation.js";
 import { configDotenv } from "dotenv";
 configDotenv({ path: "./.env" });
 
-const API_TOKEN = process.env.API_TOKEN;
-
 // Refresh RD Token every 24h
 await rdStation.refreshAccessToken();
 
-const accessToken = rdStation.getAccessToken();
+//Refresh Pipefy Token every 30 days
+await rdStation.refreshAccessToken();
 
-const pipeId = 306505374;
-const segmentId = 17086323;
+const RdAccessToken = rdStation.getAccessToken();
 
-const pipeFields = await pipefy.fetchFieldsData(pipeId);
+const pipefyAccessToken = pipefy.getAcessToken();
 
-const leadObject = {
-  name: "API Test",
-  phoneNumber: "+551399998888",
-  campaign: ["Não identificado"],
-  service: ["CI"],
-  firstQuestion: "Nao",
-  numberOfApplicants: 2,
-  SDRConsultant: ["306844193"],
-  info: "Criando novo Card via API",
-  email: "teste@testeAPIcall2.com",
-  firstContact: "2025-09-12",
-  label: ["316554221"],
-  meet: [],
-};
+console.log("token", pipefyAccessToken, "rd", RdAccessToken);
 
-const cardCreated = await pipefy.createNewCard(pipeId, leadObject);
+// const pipeId = 306505374;
+// const segmentId = 17086323;
 
-console.log(cardCreated);
+// const pipeFields = await pipefy.fetchFieldsData(pipeId);
+
+// const leadObject = {
+//   name: "API Test",
+//   phoneNumber: "+551399998888",
+//   campaign: ["Não identificado"],
+//   service: ["CI"],
+//   firstQuestion: "Nao",
+//   numberOfApplicants: 2,
+//   SDRConsultant: ["306844193"],
+//   info: "Criando novo Card via API",
+//   email: "teste@testeAPIcall2.com",
+//   firstContact: "2025-09-12",
+//   label: ["316554221"],
+//   meet: [],
+// };
+
+// const cardCreated = await pipefy.createNewCard(pipeId, leadObject);
+
+// console.log(cardCreated);
 
 // console.log(accessToken);
 

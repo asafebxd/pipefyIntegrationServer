@@ -1,14 +1,60 @@
 import { configDotenv } from "dotenv";
 configDotenv({ path: "./.env" });
 
-const API_TOKEN = process.env.API_TOKEN;
+const clientId = process.env.PIPEFY_CLIENT_ID;
+const clientSecret = process.env.PIPEFY_CLIENT_SECRET;
 
-async function fetchFieldsData(pipeId) {
+let PIPEFY_ACCESS_TOKEN;
+refreshAccessToken();
+
+async function generateAccessToken() {
+  const res = await fetch("https://app.pipefy.com/oauth/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      grant_type: "client_credentials",
+      client_id: clientId,
+      client_secret: clientSecret,
+    }),
+  });
+
+  console.log("Status code: ", res.status);
+
+  const resBody = await res.json();
+
+  return resBody.access_token;
+}
+
+async function refreshAccessToken() {
+  PIPEFY_ACCESS_TOKEN = await generateAccessToken();
+  console.log("Token Frist refresh");
+
+  async function wait30days() {
+    try {
+      PIPEFY_ACCESS_TOKEN = await generateAccessToken();
+      console.log("Token refreshed");
+    } catch (err) {
+      console.log("Failed to refresh token", err);
+    }
+
+    setInterval(() => {
+      setInterval(wait30days, 24 * 60 * 60 * 1000 * 6);
+    }, 24 * 60 * 60 * 1000 * 24);
+  }
+
+  wait30days();
+
+  return PIPEFY_ACCESS_TOKEN;
+}
+
+async function fetchFieldsData(acessToken, pipeId) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${API_TOKEN}`,
+      Authorization: `Bearer ${acessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -38,12 +84,12 @@ async function fetchFieldsData(pipeId) {
   return pipeData;
 }
 
-async function createNewCard(pipeId, leadObject) {
+async function createNewCard(acessToken, pipeId, leadObject) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${API_TOKEN}`,
+      Authorization: `Bearer ${acessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -117,12 +163,12 @@ async function createNewCard(pipeId, leadObject) {
   return JSON.stringify(resBody);
 }
 
-async function findLabels(pipeId) {
+async function findLabels(acessToken, pipeId) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${API_TOKEN}`,
+      Authorization: `Bearer ${acessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -146,12 +192,12 @@ async function findLabels(pipeId) {
   return labels;
 }
 
-async function findMembers(pipeId) {
+async function findMembers(acessToken, pipeId) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${API_TOKEN}`,
+      Authorization: `Bearer ${acessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -177,8 +223,11 @@ async function findMembers(pipeId) {
 }
 
 export const pipefy = {
+  generateAccessToken,
+  refreshAccessToken,
   createNewCard,
   fetchFieldsData,
   findLabels,
   findMembers,
+  getAcessToken: () => PIPEFY_ACCESS_TOKEN,
 };
