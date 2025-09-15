@@ -8,14 +8,14 @@ configDotenv({ path: "./.env" });
 const API_TOKEN = process.env.API_TOKEN;
 
 // Refresh RD Token every 24h
-await rdStation.refreshAccessToken();
+// await rdStation.refreshAccessToken();
 
-const accessToken = rdStation.getAccessToken();
+// const accessToken = rdStation.getAccessToken();
 
 const pipeId = 306505374;
 const segmentId = 17086323;
 
-const pipeFields = await pipefy.fetchFieldsData(pipeId);
+// const pipeFields = await pipefy.fetchFieldsData(pipeId);
 
 const leadObject = {
   name: "API Test",
@@ -32,9 +32,9 @@ const leadObject = {
   meet: [],
 };
 
-const cardCreated = await pipefy.createNewCard(pipeId, leadObject);
+// const cardCreated = await pipefy.createNewCard(pipeId, leadObject);
 
-console.log(cardCreated);
+// console.log(cardCreated);
 
 // console.log(accessToken);
 
