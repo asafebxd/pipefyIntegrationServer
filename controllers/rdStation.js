@@ -104,8 +104,6 @@ async function getLeadOriginById(acessToken, leadId) {
 export const rdStation = {
   generateAccessToken,
   refreshAccessToken,
-  getRDWebhooks,
-  postRDWebhook,
   getLeadsList,
   getLeadById,
   getLeadOriginById,

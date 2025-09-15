@@ -6,10 +6,10 @@ import { configDotenv } from "dotenv";
 configDotenv({ path: "./.env" });
 
 // Refresh RD Token every 24h
-await rdStation.refreshAccessToken();
+// await rdStation.refreshAccessToken();
 
 //Refresh Pipefy Token every 30 days
-await rdStation.refreshAccessToken();
+// await rdStation.refreshAccessToken();
 
 const RdAccessToken = rdStation.getAccessToken();
 
@@ -21,21 +21,6 @@ console.log("token", pipefyAccessToken, "rd", RdAccessToken);
 // const segmentId = 17086323;
 
 // const pipeFields = await pipefy.fetchFieldsData(pipeId);
-
-// const leadObject = {
-//   name: "API Test",
-//   phoneNumber: "+551399998888",
-//   campaign: ["Não identificado"],
-//   service: ["CI"],
-//   firstQuestion: "Nao",
-//   numberOfApplicants: 2,
-//   SDRConsultant: ["306844193"],
-//   info: "Criando novo Card via API",
-//   email: "teste@testeAPIcall2.com",
-//   firstContact: "2025-09-12",
-//   label: ["316554221"],
-//   meet: [],
-// };
 
 // const cardCreated = await pipefy.createNewCard(pipeId, leadObject);
 
