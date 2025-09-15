@@ -43,45 +43,6 @@ async function refreshAccessToken() {
   return RD_ACCESS_TOKEN;
 }
 
-async function getRDWebhooks(accessToken) {
-  const res = await fetch("https://api.rd.services/integrations/webhooks", {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  console.log("Status Code:", res.status);
-
-  const resBody = await res.json();
-
-  return resBody.webhooks;
-}
-
-async function postRDWebhook(accessToken) {
-  const res = await fetch("https://api.rd.services/integrations/webhooks", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({
-      event_type: "WEBHOOK.CONVERTED",
-      entity_type: "CONTACT",
-      http_method: "POST",
-      include_relations: ["COMPANY", "CONTACT_FUNNEL"],
-      url: "https://gioppoeconti.webhook.com.br",
-    }),
-  });
-  console.log("Status Code:", res.status);
-
-  const resBody = await res.json();
-
-  return resBody.webhooks;
-}
-
 async function getLeadsList(acessTokem, segmentId) {
   const res = await fetch(
     `https://api.rd.services/platform/segmentations/${segmentId}/contacts`,
