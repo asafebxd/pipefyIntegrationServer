@@ -2,6 +2,7 @@
   "name": "post-pipefy-script",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon index.js",
     "server": "nodemon server.js",

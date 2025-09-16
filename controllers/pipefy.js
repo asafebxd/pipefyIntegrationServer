@@ -20,7 +20,7 @@ async function generateAccessToken() {
     }),
   });
 
-  console.log("Status code: ", res.status);
+  console.log("Generate Status code: ", res.status);
 
   const resBody = await res.json();
 
@@ -29,9 +29,21 @@ async function generateAccessToken() {
 
 async function refreshAccessToken() {
   PIPEFY_ACCESS_TOKEN = await generateAccessToken();
-  console.log("Token Frist refresh");
+  console.log("Token first refresh");
 
-  async function wait30days() {
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const MAX_SAFE_DELAY = 24 * DAY_MS;
+
+  async function scheduleRefresh(remainingDays) {
+    if (remainingDays > 0) {
+      const delay = Math.min(remainingDays, 24) * DAY_MS;
+      setTimeout(
+        () => scheduleRefresh(remainingDays - Math.min(remainingDays, 24)),
+        delay
+      );
+      return;
+    }
+
     try {
       PIPEFY_ACCESS_TOKEN = await generateAccessToken();
       console.log("Token refreshed");
@@ -39,12 +51,10 @@ async function refreshAccessToken() {
       console.log("Failed to refresh token", err);
     }
 
-    setInterval(() => {
-      setInterval(wait30days, 24 * 60 * 60 * 1000 * 6);
-    }, 24 * 60 * 60 * 1000 * 24);
+    scheduleRefresh(30);
   }
 
-  wait30days();
+  scheduleRefresh(30);
 
   return PIPEFY_ACCESS_TOKEN;
 }
@@ -115,7 +125,7 @@ async function createNewCard(acessToken, pipeId, leadObject) {
                 },
                 {
                     field_id: "quem_o_italiano"
-                    field_value:  "${leadObject.firstQuestion}"
+                    field_value:  "${leadObject.deceased}"
                 },
                 {
                     field_id: "quantidade_de_requerentes"
