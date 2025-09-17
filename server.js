@@ -47,8 +47,6 @@ app.post("/api/v1/newLead", async (req, res) => {
   const reverse = split.reverse();
   const formatedData = reverse.join("-");
 
-  console.log("rawData: ", rawDate);
-
   let tipoDeCampanha;
 
   if ((newLead.form.name = "forms mês do cliente - Longa")) {
@@ -77,10 +75,27 @@ app.post("/api/v1/newLead", async (req, res) => {
     meet: [],
   };
 
-  console.log(lead);
-
   const cardResponse = await pipefy.createNewCard(accessToken, pipeId, lead);
   console.log(cardResponse);
+
+  // const n8nRes = await fetch(
+  //   "https://n8n.choranmidias.com/webhook/coleta-leads",
+  //   {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       body: req.body,
+  //     }),
+  //   }
+  // );
+
+  // console.log("Status N8N:", n8nRes.status);
+
+  // const n8nResBody = await n8nRes.json();
+
+  // console.log(n8nResBody);
 
   res.status(201).json({ message: "New lead created", newLead: lead });
 });
