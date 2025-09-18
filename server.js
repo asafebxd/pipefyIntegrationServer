@@ -1,5 +1,6 @@
 import express from "express";
 import { pipefy } from "./controllers/pipefy.js";
+import { n8n } from "./controllers/n8n.js";
 
 const pipeId = 306505374;
 const app = express();
@@ -14,21 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Run tmole 3000 && npm run server
-
-let leads = {
-  name: "API Test",
-  phoneNumber: "+551399998888",
-  campaign: ["Não identificado"],
-  service: ["CI"],
-  deceased: "Nao",
-  numberOfApplicants: 2,
-  SDRConsultant: ["306844193"],
-  info: "Criando novo Card via API",
-  email: "teste@testeAPIcall2.com",
-  firstContact: "2025-09-12",
-  label: ["316554221"],
-  meet: [],
-};
 
 app.get("/", (req, res) => {
   res.json("Server Running");
@@ -47,6 +33,20 @@ app.post("/api/v1/newLead", async (req, res) => {
   const reverse = split.reverse();
   const formatedData = reverse.join("-");
 
+  // SDR Consultant Logic
+  const SDRArray = ["306993645", "306993647", "306993651"];
+  // 306993645 = Nuria Maia Giro
+  // 306993647 = Luiz Felipe Oliveira Silva
+  // 306993651 = Luiz Henrique Silva
+
+  function randomize(array) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
+
+  let firstSDRConsultant = randomize(SDRArray);
+  let SDRConsultant = firstSDRConsultant;
+
+  // Campain Logic
   let tipoDeCampanha;
 
   if ((newLead.form.name = "forms mês do cliente - Longa")) {
@@ -62,7 +62,11 @@ app.post("/api/v1/newLead", async (req, res) => {
     service: ["CI"],
     deceased: `${formFields.family.value}`,
     numberOfApplicants: formFields.pro.value === "somente eu" ? 1 : 0,
-    SDRConsultant: ["306844193"],
+    SDRConsultant: [
+      SDRConsultant === firstSDRConsultant
+        ? randomize(SDRArray)
+        : SDRConsultant,
+    ],
     info: `Cidade: ${formFields.city.value},
     ${formFields.italy.title} ${formFields.italy.value},
     ${formFields.family.title} ${formFields.family.value}, 
@@ -75,27 +79,14 @@ app.post("/api/v1/newLead", async (req, res) => {
     meet: [],
   };
 
+  //Update First Consultant to avoid repetition
+  firstSDRConsultant = lead.SDRConsultant;
+  SDRConsultant = randomize(SDRArray);
+
   const cardResponse = await pipefy.createNewCard(accessToken, pipeId, lead);
   console.log(cardResponse);
 
-  // const n8nRes = await fetch(
-  //   "https://n8n.choranmidias.com/webhook/coleta-leads",
-  //   {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       body: req.body,
-  //     }),
-  //   }
-  // );
-
-  // console.log("Status N8N:", n8nRes.status);
-
-  // const n8nResBody = await n8nRes.json();
-
-  // console.log(n8nResBody);
+  await n8n.sendBody("coleta-dados", newLead);
 
   res.status(201).json({ message: "New lead created", newLead: lead });
 });
