@@ -184,10 +184,9 @@ async function findLabels(acessToken, pipeId) {
       query: `
        {
         pipe(id: "${pipeId}") {
-          members {
+          labels {
             id
             name
-            email
     }
   }
 }
