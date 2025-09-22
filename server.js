@@ -8,7 +8,7 @@ configDotenv({ path: "./.env" });
 
 const pipeId = process.env.PIPEFY_SDR_PIPE_ID;
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 //Refresh Pipefy Token every 30 days
 await pipefy.refreshAccessToken();
@@ -86,14 +86,12 @@ app.post("/api/v1/newLead", async (req, res) => {
     gradeLabel = labelsObject[4].id;
   }
 
-  console.log(gradeLabel);
-
   const lead = {
     name: `${formFields.nome.value}`,
     phoneNumber: `${formFields.whatsapp.value}`,
-    campaign: ["Forms Mês do Cliente"],
+    campaign: [formFields.utm_campaign.value],
     service: [service],
-    deceased: `${formFields.parentesco.value},`,
+    deceased: `${formFields.parentesco.value}`,
     numberOfApplicants: formFields.interesse.value,
     SDRConsultant: [
       SDRConsultant === firstSDRConsultant
@@ -126,7 +124,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     await n8n.sendBody("leads_CP", newLead);
   }
 
-  res.status(200).json({ message: "New lead created" });
+  res.status(200).json({ message: "New lead created", newLead: req.body });
 });
 
 app.listen(port, () => {
