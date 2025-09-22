@@ -51,7 +51,7 @@ app.get("/api/v1/leads", (req, res) => {
 
 app.post("/api/v1/teste", (req, res) => {
   console.log("teste", req.body);
-  res.status(200);
+  res.status(200).json({ message: "New lead created", newLead: req.body });
 });
 
 app.post("/api/v1/newLead", async (req, res) => {
@@ -126,7 +126,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     await n8n.sendBody("leads_CP", newLead);
   }
 
-  res.status(201).json({ message: "New lead created", newLead: lead });
+  res.status(200).json({ message: "New lead created", newLead: req.body });
 });
 
 app.listen(port, () => {
