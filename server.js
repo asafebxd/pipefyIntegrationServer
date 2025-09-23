@@ -89,7 +89,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     gradeLabel = labelsObject[4].id;
   }
 
-  if (campaign === " ") {
+  if (campaign === "") {
     campaign = "Não identificado";
   }
 
@@ -131,7 +131,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     await n8n.sendBody("leads_CP", newLead);
   }
 
-  res.status(200).json({ message: "New lead created", newLead: req.body });
+  res.status(200).json({ message: "New lead created" });
 });
 
 app.listen(port, () => {
