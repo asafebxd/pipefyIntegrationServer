@@ -90,12 +90,7 @@ app.post("/api/v1/newLead", async (req, res) => {
         ? helpers.randomize(SDRArray)
         : SDRConsultant,
     ],
-    info: `
-    ${formFields.documento.title} ${formFields.documento.value},
-    ${formFields.Judicial.title} ${formFields.Judicial.value},
-    ${formFields.interesse.title} ${formFields.interesse.value} 
-    ${formFields.processo.title} ${formFields.processo.value} 
-    `,
+    info: `${helpers.getInfo(formFields)}`,
     email: `${formFields.email.value}`,
     firstContact: `${formattedDate}`,
     label: [gradeLabel],

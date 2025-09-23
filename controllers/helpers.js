@@ -30,7 +30,27 @@ function gradeCalculator(formFields) {
   return grade;
 }
 
+function getAnswers(formFields) {
+  let info = "";
+
+  if (formFields.documento?.value !== undefined) {
+    info += `${formFields.documento.title} ${formFields.documento.value}, `;
+  }
+  if (formFields.Judicial?.value !== undefined) {
+    info += `${formFields.Judicial.title} ${formFields.Judicial.value}, `;
+  }
+  if (formFields.interesse?.value !== undefined) {
+    info += `${formFields.interesse.title} ${formFields.interesse.value}, `;
+  }
+  if (formFields.processo?.value !== undefined) {
+    info += `${formFields.processo.title} ${formFields.processo.value}, `;
+  }
+
+  return info;
+}
+
 export const helpers = {
   randomize,
   gradeCalculator,
+  getAnswers,
 };
