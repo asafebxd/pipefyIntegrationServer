@@ -89,7 +89,7 @@ async function fetchFieldsData(acessToken, pipeId) {
   console.log("Status code: ", res.status);
 
   const resBody = await res.json();
-  const pipeData = resBody.data.pipe;
+  const pipeData = resBody.data.pipe.start_form_fields;
 
   return pipeData;
 }
@@ -196,7 +196,7 @@ async function findLabels(acessToken, pipeId) {
 
   const resBody = await res.json();
 
-  const labels = resBody.data.pipe;
+  const labels = resBody.data.pipe.labels;
 
   return labels;
 }
