@@ -42,16 +42,6 @@ app.get("/", (req, res) => {
   res.json("Server Running");
 });
 
-app.get("/api/v1/leads", (req, res) => {
-  res.json(leads);
-  res.status(200).json({ message: "Leads list" });
-});
-
-app.post("/api/v1/teste", (req, res) => {
-  console.log("teste", req.body);
-  res.status(200).json({ message: "New lead created", newLead: req.body });
-});
-
 app.post("/api/v1/newLead", async (req, res) => {
   const newLead = req.body;
   const formFields = newLead.fields;
