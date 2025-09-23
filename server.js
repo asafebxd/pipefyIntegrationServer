@@ -46,6 +46,14 @@ app.post("/api/v1/newLead", async (req, res) => {
   const newLead = req.body;
   const formFields = newLead.fields;
 
+  // Send new lead to C2G
+  if (lead.service[0] === "CI") {
+    await n8n.sendBody("coleta-leads", newLead);
+  }
+  if (lead.service[0] === "CP") {
+    await n8n.sendBody("leads_CP", newLead);
+  }
+
   //Lead grade
   let leadGrade = helpers.gradeCalculator(formFields);
   let gradeLabel = "";
@@ -103,13 +111,6 @@ app.post("/api/v1/newLead", async (req, res) => {
 
   const cardResponse = await pipefy.createNewCard(accessToken, pipeId, lead);
   console.log(cardResponse);
-
-  if (lead.service[0] === "CI") {
-    await n8n.sendBody("coleta-leads", newLead);
-  }
-  if (lead.service[0] === "CP") {
-    await n8n.sendBody("leads_CP", newLead);
-  }
 
   console.log(newLead);
 
