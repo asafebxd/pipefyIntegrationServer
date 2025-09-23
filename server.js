@@ -46,14 +46,6 @@ app.post("/api/v1/newLead", async (req, res) => {
   const newLead = req.body;
   const formFields = newLead.fields;
 
-  // Send new lead to C2G
-  if (lead.service[0] === "CI") {
-    await n8n.sendBody("coleta-leads", newLead);
-  }
-  if (lead.service[0] === "CP") {
-    await n8n.sendBody("leads_CP", newLead);
-  }
-
   //Lead grade
   let leadGrade = helpers.gradeCalculator(formFields);
   let gradeLabel = "";
@@ -104,6 +96,14 @@ app.post("/api/v1/newLead", async (req, res) => {
     label: [gradeLabel],
     meet: [],
   };
+
+  // Send new lead to C2G
+  if (lead.service[0] === "CI") {
+    await n8n.sendBody("coleta-leads", newLead);
+  }
+  if (lead.service[0] === "CP") {
+    await n8n.sendBody("leads_CP", newLead);
+  }
 
   //Update First Consultant to avoid repetition
   firstSDRConsultant = lead.SDRConsultant;
