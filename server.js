@@ -111,6 +111,8 @@ app.post("/api/v1/newLead", async (req, res) => {
     await n8n.sendBody("leads_CP", newLead);
   }
 
+  console.log(newLead);
+
   res.sendStatus(200);
 });
 
