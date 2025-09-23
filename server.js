@@ -24,15 +24,6 @@ const campaigns = startForm[2].options;
 
 //Grade Labels
 const labels = await pipefy.findLabels(accessToken, pipeId);
-console.log(labels);
-
-const labelsObject = [
-  { id: "316585201", name: "Lead Nota 1" },
-  { id: "316585207", name: "Lead Nota 2" },
-  { id: "316585225", name: "Lead Nota 3" },
-  { id: "316585236", name: "Lead Nota 4" },
-  { id: "316585240", name: "Lead Nota 5" },
-];
 
 const SDRArray = ["306993645", "306993647", "306993651"];
 // 306993645 = Nuria Maia Giro
@@ -78,19 +69,19 @@ app.post("/api/v1/newLead", async (req, res) => {
 
   //Grade label logic
   if (leadGrade === 1) {
-    gradeLabel = labelsObject[8].id;
+    gradeLabel = labels[8].id;
   }
   if (leadGrade === 2) {
-    gradeLabel = labelsObject[9].id;
+    gradeLabel = labels[9].id;
   }
   if (leadGrade === 3) {
-    gradeLabel = labelsObject[10].id;
+    gradeLabel = labels[10].id;
   }
   if (leadGrade === 4) {
-    gradeLabel = labelsObject[11].id;
+    gradeLabel = labels[11].id;
   }
   if (leadGrade === 5) {
-    gradeLabel = labelsObject[12].id;
+    gradeLabel = labels[12].id;
   }
 
   const lead = {
@@ -135,7 +126,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     await n8n.sendBody("leads_CP", newLead);
   }
 
-  res.status(200);
+  res.sendStatus(200);
 });
 
 app.listen(port, () => {
