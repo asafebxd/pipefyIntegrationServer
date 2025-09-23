@@ -90,7 +90,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     name: `${formFields.nome.value}`,
     phoneNumber: `${formFields.whatsapp.value}`,
     campaign: [
-      formFields.utm_campaign.value === ""
+      formFields.utm_campaign.value === " "
         ? "Não identificado"
         : formFields.utm_campaign.value,
     ],
