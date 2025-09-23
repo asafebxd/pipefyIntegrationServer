@@ -58,6 +58,9 @@ app.post("/api/v1/newLead", async (req, res) => {
   const newLead = req.body;
   const formFields = newLead.fields;
 
+  //Campaign
+  let campaign = formFields.utm_campaign.value;
+
   //Lead grade
   let leadGrade = helpers.gradeCalculator(formFields);
   let gradeLabel = "";
@@ -86,14 +89,14 @@ app.post("/api/v1/newLead", async (req, res) => {
     gradeLabel = labelsObject[4].id;
   }
 
+  if (campaign === " ") {
+    campaign = "Não identificado";
+  }
+
   const lead = {
     name: `${formFields.nome.value}`,
     phoneNumber: `${formFields.whatsapp.value}`,
-    campaign: [
-      formFields.utm_campaign.value === " "
-        ? "Não identificado"
-        : formFields.utm_campaign.value,
-    ],
+    campaign: [],
     service: [service],
     deceased: `${formFields.parentesco.value}`,
     numberOfApplicants: formFields.interesse.value,
