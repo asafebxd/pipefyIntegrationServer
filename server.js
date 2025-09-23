@@ -18,7 +18,14 @@ const accessToken = pipefy.getAcessToken();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Campaigns array
+const startForm = await pipefy.fetchFieldsData(accessToken, pipeId);
+const campaigns = startForm[2].options;
+
 //Grade Labels
+const labels = await pipefy.findLabels(accessToken, pipeId);
+console.log(labels);
+
 const labelsObject = [
   { id: "316585201", name: "Lead Nota 1" },
   { id: "316585207", name: "Lead Nota 2" },
@@ -58,9 +65,6 @@ app.post("/api/v1/newLead", async (req, res) => {
   const newLead = req.body;
   const formFields = newLead.fields;
 
-  //Campaign
-  let campaign = formFields.utm_campaign.value;
-
   //Lead grade
   let leadGrade = helpers.gradeCalculator(formFields);
   let gradeLabel = "";
@@ -74,29 +78,29 @@ app.post("/api/v1/newLead", async (req, res) => {
 
   //Grade label logic
   if (leadGrade === 1) {
-    gradeLabel = labelsObject[0].id;
+    gradeLabel = labelsObject[8].id;
   }
   if (leadGrade === 2) {
-    gradeLabel = labelsObject[1].id;
+    gradeLabel = labelsObject[9].id;
   }
   if (leadGrade === 3) {
-    gradeLabel = labelsObject[2].id;
+    gradeLabel = labelsObject[10].id;
   }
   if (leadGrade === 4) {
-    gradeLabel = labelsObject[3].id;
+    gradeLabel = labelsObject[11].id;
   }
   if (leadGrade === 5) {
-    gradeLabel = labelsObject[4].id;
-  }
-
-  if (campaign === "") {
-    campaign = "Não identificado";
+    gradeLabel = labelsObject[12].id;
   }
 
   const lead = {
     name: `${formFields.nome.value}`,
     phoneNumber: `${formFields.whatsapp.value}`,
-    campaign: [campaign],
+    campaign: [
+      campaigns.includes(formFields.utm_campaign.value)
+        ? formFields.utm_campaign.value
+        : "Não identificado",
+    ],
     service: [service],
     deceased: `${formFields.parentesco.value}`,
     numberOfApplicants: formFields.interesse.value,
