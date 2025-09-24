@@ -75,23 +75,23 @@ app.post("/api/v1/newLead", async (req, res) => {
   }
 
   const lead = {
-    name: `${formFields.nome.value}`,
-    phoneNumber: `${formFields.whatsapp.value}`,
+    name: `${formFields.nome?.value}`,
+    phoneNumber: `${formFields.whatsapp?.value}`,
     campaign: [
-      campaigns.includes(formFields.utm_campaign.value)
+      campaigns.includes(formFields.utm_campaign?.value)
         ? formFields.utm_campaign.value
         : "Não identificado",
     ],
     service: [service],
-    deceased: `${formFields.parentesco.value}`,
-    numberOfApplicants: formFields.interesse.value,
+    deceased: `${formFields.parentesco?.value}`,
+    numberOfApplicants: formFields.interesse?.value,
     SDRConsultant: [
       SDRConsultant === firstSDRConsultant
         ? helpers.randomize(SDRArray)
         : SDRConsultant,
     ],
     info: `${helpers.getAnswers(formFields)}`,
-    email: `${formFields.email.value}`,
+    email: `${formFields.email?.value}`,
     firstContact: `${formattedDate}`,
     label: [gradeLabel],
     meet: [],
