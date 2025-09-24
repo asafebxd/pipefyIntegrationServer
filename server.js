@@ -46,19 +46,29 @@ app.get("/", (req, res) => {
 app.post("/api/v1/newLeadByAgent", async (req, res) => {
   console.log(req.body);
   const newLead = req.body;
+  let service;
+
+  if (newLead?.tipoDeServico === "Portuguesa") {
+    service = "CP";
+  }
+  if (newLead?.tipoDeServico === "Italiana") {
+    service = "CI";
+  } else {
+    service = "Outros";
+  }
 
   const lead = {
-    name: newLead.nome,
-    phoneNumber: toString(newLead.contato),
+    name: newLead?.nome,
+    phoneNumber: newLead?.contact_phone,
     campaign: ["Whatsapp"],
-    service: [newLead.serviço],
-    deceased: `${newLead.grauDeParentesco}`,
-    numberOfApplicants: newLead.quantasPessoasTemInteresse || 1,
+    service: [service],
+    deceased: `${newLead?.grauDeParentesco}`,
+    numberOfApplicants: newLead?.quantasPessoasTemInteresse || 1,
     SDRConsultant: [306844193],
-    info: `Quantas pessoas tem interesse? ${newLead.quantasPessoasTemInteresse}, 
-    Possui documentos? ${newLead.possuiDocumento}
-    Conhece a via judicial? ${newLead.conheceAViaJudicial},
-    Quando pretende iniciar? ${quandoPretendeIniciar}`,
+    info: `Quantas pessoas tem interesse? ${newLead?.quantasPessoasTemInteresse}, 
+    Possui documentos? ${newLead?.possuiDocumento}
+    Conhece a via judicial? ${newLead?.conheceAViaJudicial},
+    Quando pretende iniciar? ${newLead?.quandoPretendeIniciar}`,
     email: "",
     firstContact: `${formattedDate}`,
     label: [],
