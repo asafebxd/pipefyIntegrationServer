@@ -45,6 +45,7 @@ app.get("/", (req, res) => {
 app.post("/api/v1/newLead", async (req, res) => {
   const newLead = req.body;
   const formFields = newLead.fields;
+  console.log(newLead);
 
   //Lead grade
   let leadGrade = helpers.gradeCalculator(formFields);
@@ -111,8 +112,6 @@ app.post("/api/v1/newLead", async (req, res) => {
 
   const cardResponse = await pipefy.createNewCard(accessToken, pipeId, lead);
   console.log(cardResponse);
-
-  console.log(newLead);
 
   res.sendStatus(200);
 });
