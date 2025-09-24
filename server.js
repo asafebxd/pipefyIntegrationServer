@@ -85,7 +85,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     ],
     service: [service],
     deceased: `${formFields.parentesco?.value}`,
-    numberOfApplicants: formFields.interesse?.value,
+    numberOfApplicants: formFields.interesse?.value || 1,
     SDRConsultant: [
       SDRConsultant === firstSDRConsultant
         ? helpers.randomize(SDRArray)
