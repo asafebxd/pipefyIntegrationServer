@@ -7,6 +7,7 @@ import { configDotenv } from "dotenv";
 configDotenv({ path: "./.env" });
 
 const pipeId = process.env.PIPEFY_SDR_PIPE_ID;
+const pipeId3RD = process.env.PIPEFY_3RD_SDR_PIPE_ID;
 const app = express();
 const port = process.env.PORT;
 
@@ -40,6 +41,34 @@ const formattedDate = `${year}-${month}-${day}`;
 //Run tmole 3000 && npm run server
 app.get("/", (req, res) => {
   res.json("Server Running");
+});
+
+app.post("/api/v1/newLeadByAgent", async (req, res) => {
+  console.log(req.body);
+  const newLead = req.body;
+
+  const lead = {
+    name: newLead.nome,
+    phoneNumber: toString(newLead.contato),
+    campaign: ["Whatsapp"],
+    service: [newLead.serviço],
+    deceased: `${newLead.grauDeParentesco}`,
+    numberOfApplicants: newLead.quantasPessoasTemInteresse || 1,
+    SDRConsultant: [306844193],
+    info: `Quantas pessoas tem interesse? ${newLead.quantasPessoasTemInteresse}, 
+    Possui documentos? ${newLead.possuiDocumento}
+    Conhece a via judicial? ${newLead.conheceAViaJudicial},
+    Quando pretende iniciar? ${quandoPretendeIniciar}`,
+    email: "",
+    firstContact: `${formattedDate}`,
+    label: [],
+    meet: [],
+  };
+
+  const cardResponse = await pipefy.createNewCard(accessToken, pipeId3RD, lead);
+  console.log(cardResponse);
+
+  res.sendStatus(200);
 });
 
 app.post("/api/v1/newLead", async (req, res) => {
