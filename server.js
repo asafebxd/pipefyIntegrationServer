@@ -58,7 +58,7 @@ app.post("/api/v1/newLeadByAgent", async (req, res) => {
     info: newLead?.contactInfo,
     email: "",
     firstContact: `${formattedDate}`,
-    label: [],
+    label: ["316638134"],
     meet: [],
   };
 
