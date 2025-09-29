@@ -11,10 +11,10 @@ const pipeId3RD = process.env.PIPEFY_3RD_SDR_PIPE_ID;
 const app = express();
 const port = process.env.PORT;
 
-//Refresh Pipefy Token every 30 days
-await pipefy.refreshAccessToken();
+let tokenObject = await pipefy.generateAccessToken();
 
-const accessToken = pipefy.getAcessToken();
+//Pipefy acessToken
+let accessToken = tokenObject.access_token;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -46,6 +46,12 @@ app.post("/api/v1/newLeadByAgent", async (req, res) => {
   console.log(req.body);
   const newLead = req.body;
 
+  //IsTokenExpired returns false to valid tokens
+  if (pipefy.isTokenExpired(tokenObject)) {
+    tokenObject = await pipefy.generateAccessToken();
+    accessToken = tokenObject.access_token;
+  }
+
   const lead = {
     name: newLead?.name,
     phoneNumber: `+${newLead?.whatsappPhone}`,
@@ -71,6 +77,12 @@ app.post("/api/v1/newLead", async (req, res) => {
   const newLead = req.body;
   const formFields = newLead.fields;
   console.log(newLead);
+
+  //IsTokenExpired returns false to valid tokens
+  if (pipefy.isTokenExpired(tokenObject)) {
+    tokenObject = await pipefy.generateAccessToken();
+    accessToken = tokenObject.access_token;
+  }
 
   //Lead grade
   let leadGrade = helpers.gradeCalculator(formFields);

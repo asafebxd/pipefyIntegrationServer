@@ -4,9 +4,6 @@ configDotenv({ path: "./.env" });
 const clientId = process.env.PIPEFY_CLIENT_ID;
 const clientSecret = process.env.PIPEFY_CLIENT_SECRET;
 
-let PIPEFY_ACCESS_TOKEN;
-refreshAccessToken();
-
 async function generateAccessToken() {
   const res = await fetch("https://app.pipefy.com/oauth/token", {
     method: "POST",
@@ -24,39 +21,13 @@ async function generateAccessToken() {
 
   const resBody = await res.json();
 
-  return resBody.access_token;
+  return resBody;
 }
 
-async function refreshAccessToken() {
-  PIPEFY_ACCESS_TOKEN = await generateAccessToken();
-  console.log("Token first refresh");
+function isTokenExpired(token) {
+  const expiresAt = (token.expires_in + token.created_at) * 1000;
 
-  const DAY_MS = 24 * 60 * 60 * 1000;
-  const MAX_SAFE_DELAY = 24 * DAY_MS;
-
-  async function scheduleRefresh(remainingDays) {
-    if (remainingDays > 0) {
-      const delay = Math.min(remainingDays, 24) * DAY_MS;
-      setTimeout(
-        () => scheduleRefresh(remainingDays - Math.min(remainingDays, 24)),
-        delay
-      );
-      return;
-    }
-
-    try {
-      PIPEFY_ACCESS_TOKEN = await generateAccessToken();
-      console.log("Token refreshed");
-    } catch (err) {
-      console.log("Failed to refresh token", err);
-    }
-
-    scheduleRefresh(30);
-  }
-
-  scheduleRefresh(30);
-
-  return PIPEFY_ACCESS_TOKEN;
+  return Date.now() >= expiresAt;
 }
 
 async function fetchFieldsData(acessToken, pipeId) {
@@ -233,10 +204,9 @@ async function findMembers(acessToken, pipeId) {
 
 export const pipefy = {
   generateAccessToken,
-  refreshAccessToken,
+  isTokenExpired,
   createNewCard,
   fetchFieldsData,
   findLabels,
   findMembers,
-  getAcessToken: () => PIPEFY_ACCESS_TOKEN,
 };
