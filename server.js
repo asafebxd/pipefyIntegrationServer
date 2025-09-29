@@ -26,8 +26,7 @@ const campaigns = startForm[2].options;
 //Grade Labels
 const labels = await pipefy.findLabels(accessToken, pipeId);
 
-const SDRArray = ["306993645", "306993647", "306993651"];
-// 306993645 = Nuria Maia Giro
+const SDRArray = ["306993647", "306993651"];
 // 306993647 = Luiz Felipe Oliveira Silva
 // 306993651 = Luiz Henrique Silva
 
