@@ -144,6 +144,53 @@ async function createNewCard(acessToken, pipeId, leadObject) {
   return JSON.stringify(resBody);
 }
 
+async function createNewCardInstragramDM(acessToken, pipeId, leadObject) {
+  const res = await fetch("https://api.pipefy.com/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${acessToken}`,
+    },
+    body: JSON.stringify({
+      query: `
+        mutation {
+            createCard(input: {
+                pipe_id: ${pipeId}
+                fields_attributes: [
+                {
+                    field_id: "nome"
+                    field_value:  "${leadObject.name}"
+                },
+                 {
+                    field_id: "telefone"
+                    field_value: "${leadObject.phoneNumber}"
+                },
+                {
+                    field_id: "tipo_de_campanha_1"
+                    field_value: "${leadObject.campaign}"
+                },
+                {
+                    field_id: "sele_o_de_etiqueta"
+                    field_value:  "${leadObject.label}"
+                },
+              ]
+            }) {
+                card {
+                    id
+                }
+            }
+        }
+      
+      `,
+    }),
+  });
+  console.log("Status code: ", res.status);
+
+  const resBody = await res.json();
+
+  return JSON.stringify(resBody);
+}
+
 async function findLabels(acessToken, pipeId) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
@@ -206,6 +253,7 @@ export const pipefy = {
   generateAccessToken,
   isTokenExpired,
   createNewCard,
+  createNewCardInstragramDM,
   fetchFieldsData,
   findLabels,
   findMembers,

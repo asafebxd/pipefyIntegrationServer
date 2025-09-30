@@ -42,8 +42,6 @@ app.get("/", (req, res) => {
   res.json("Server Running");
 });
 
-console.log(await pipefy.findLabels(accessToken, pipeId3RD));
-
 app.post("/api/v1/newLeadByAgent", async (req, res) => {
   console.log(req.body);
   const newLead = req.body;
@@ -159,8 +157,25 @@ app.post("/api/v1/newLead", async (req, res) => {
   res.sendStatus(200);
 });
 
-app.post("/api/v1/manychat", (req, res) => {
+app.post("/api/v1/manychat", async (req, res) => {
+  const newLead = req.body;
   console.log(req.body);
+
+  const lead = {
+    name: newLead?.name,
+    phoneNumber: `+${newLead?.telefone}`,
+    campaign: ["Instagram ADS"],
+    label: ["316647925"],
+  };
+
+  const cardResponse = await pipefy.createNewCardInstragramDM(
+    accessToken,
+    pipeId3RD,
+    lead
+  );
+  console.log(cardResponse);
+
+  res.sendStatus(200);
 });
 
 app.listen(port, () => {
