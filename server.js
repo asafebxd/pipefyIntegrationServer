@@ -159,6 +159,10 @@ app.post("/api/v1/newLead", async (req, res) => {
   res.sendStatus(200);
 });
 
+app.post("api/v1/manychat", async, (req, res) => {
+  console.log(req.body);
+});
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
