@@ -42,6 +42,8 @@ app.get("/", (req, res) => {
   res.json("Server Running");
 });
 
+console.log(await pipefy.findPhases(accessToken, pipeId3RD));
+
 app.post("/api/v1/newLeadByAgent", async (req, res) => {
   console.log(req.body);
   const newLead = req.body;

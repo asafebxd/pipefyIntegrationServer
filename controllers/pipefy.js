@@ -77,6 +77,7 @@ async function createNewCard(acessToken, pipeId, leadObject) {
         mutation {
             createCard(input: {
                 pipe_id: ${pipeId}
+                phase_id: 
                 fields_attributes: [
                 {
                     field_id: "nome"
@@ -219,6 +220,34 @@ async function findLabels(acessToken, pipeId) {
   return labels;
 }
 
+async function findPhases(acessToken, pipeId) {
+  const res = await fetch("https://api.pipefy.com/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${acessToken}`,
+    },
+    body: JSON.stringify({
+      query: `
+       {
+        pipe(id: "${pipeId}") {
+          phases {
+            id
+            name
+          }
+        }
+      }
+      `,
+    }),
+  });
+
+  const resBody = await res.json();
+
+  const phases = resBody.data.pipe;
+
+  return phases;
+}
+
 async function findMembers(acessToken, pipeId) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
@@ -256,5 +285,6 @@ export const pipefy = {
   createNewCardInstragramDM,
   fetchFieldsData,
   findLabels,
+  findPhases,
   findMembers,
 };
