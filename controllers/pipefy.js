@@ -77,7 +77,7 @@ async function createNewCard(acessToken, pipeId, leadObject) {
         mutation {
             createCard(input: {
                 pipe_id: ${pipeId}
-                phase_id: 
+                phase_id: 340372481
                 fields_attributes: [
                 {
                     field_id: "nome"
