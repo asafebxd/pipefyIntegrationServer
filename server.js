@@ -131,7 +131,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     info: `${helpers.getAnswers(formFields)}`,
     email: `${formFields.email?.value}`,
     firstContact: `${formattedDate}`,
-    label: [gradeLabel],
+    label: [],
     meet: [],
   };
 
