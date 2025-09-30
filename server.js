@@ -147,8 +147,14 @@ app.post("/api/v1/newLead", async (req, res) => {
   firstSDRConsultant = lead.SDRConsultant;
   SDRConsultant = helpers.randomize(SDRArray);
 
-  const cardResponse = await pipefy.createNewCard(accessToken, pipeId, lead);
-  console.log(cardResponse);
+  const cardResponseSDR = await pipefy.createNewCard(accessToken, pipeId, lead);
+  console.log("SDR:", cardResponseSDR);
+  const cardResponseTerceiro = await pipefy.createNewCard(
+    accessToken,
+    pipeId3RD,
+    lead
+  );
+  console.log("Terceiro:", cardResponseTerceiro);
 
   res.sendStatus(200);
 });
