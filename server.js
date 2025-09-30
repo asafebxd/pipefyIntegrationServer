@@ -42,6 +42,8 @@ app.get("/", (req, res) => {
   res.json("Server Running");
 });
 
+console.log(await pipefy.findLabels(accessToken, pipeId3RD));
+
 app.post("/api/v1/newLeadByAgent", async (req, res) => {
   console.log(req.body);
   const newLead = req.body;
@@ -131,7 +133,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     info: `${helpers.getAnswers(formFields)}`,
     email: `${formFields.email?.value}`,
     firstContact: `${formattedDate}`,
-    label: [],
+    label: ["316647443"],
     meet: [],
   };
 
