@@ -159,7 +159,7 @@ app.post("/api/v1/newLead", async (req, res) => {
   res.sendStatus(200);
 });
 
-app.post("/api/v1/manychat", async, (req, res) => {
+app.post("/api/v1/manychat", (req, res) => {
   console.log(req.body);
 });
 
