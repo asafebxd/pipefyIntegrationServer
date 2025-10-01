@@ -19,13 +19,6 @@ let accessToken = tokenObject.access_token;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Campaigns array
-const startForm = await pipefy.fetchFieldsData(accessToken, pipeId);
-const campaigns = startForm[2].options;
-
-//Grade Labels
-const labels = await pipefy.findLabels(accessToken, pipeId);
-
 // const SDRArray = ["306993647", "306993651"];
 // 306993647 = Luiz Felipe Oliveira Silva
 // 306993651 = Luiz Henrique Silva
@@ -84,9 +77,9 @@ app.post("/api/v1/newLead", async (req, res) => {
     accessToken = tokenObject.access_token;
   }
 
-  //Lead grade
-  let leadGrade = helpers.gradeCalculator(formFields);
-  let gradeLabel = "";
+  // Campaigns array
+  const startForm = await pipefy.fetchFieldsData(accessToken, pipeId);
+  const campaigns = startForm[2].options;
 
   // SDR Consultant Logic
   // let firstSDRConsultant = helpers.randomize(SDRArray);
@@ -94,23 +87,6 @@ app.post("/api/v1/newLead", async (req, res) => {
 
   // Service Logic || Theres is only one CP Landing page
   const service = newLead.form.id === "2e1ae2f" ? "CP" : "CI";
-
-  //Grade label logic
-  if (leadGrade === 1) {
-    gradeLabel = labels[8].id;
-  }
-  if (leadGrade === 2) {
-    gradeLabel = labels[9].id;
-  }
-  if (leadGrade === 3) {
-    gradeLabel = labels[10].id;
-  }
-  if (leadGrade === 4) {
-    gradeLabel = labels[11].id;
-  }
-  if (leadGrade === 5) {
-    gradeLabel = labels[12].id;
-  }
 
   const lead = {
     name: `${formFields.nome?.value}`,
@@ -127,7 +103,10 @@ app.post("/api/v1/newLead", async (req, res) => {
     info: `${helpers.getAnswers(formFields)}`,
     email: `${formFields.email?.value}`,
     firstContact: `${formattedDate}`,
-    label: ["316647443"],
+    label: JSON.stringify([
+      "316647443",
+      `${await helpers.gradeCalculator(formFields)}`,
+    ]),
     meet: [],
   };
 

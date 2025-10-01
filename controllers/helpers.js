@@ -1,9 +1,44 @@
+import { pipefy } from "./pipefy.js";
+
+import { configDotenv } from "dotenv";
+configDotenv({ path: "./.env" });
+
+let tokenObject = await pipefy.generateAccessToken();
+
+//Pipefy acessToken
+let accessToken = tokenObject.access_token;
+const pipeId3RD = process.env.PIPEFY_3RD_SDR_PIPE_ID;
+
 function randomize(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-function gradeCalculator(formFields) {
-  let grade = 1;
+async function gradeCalculator(formFields) {
+  //IsTokenExpired returns false to valid tokens
+  if (pipefy.isTokenExpired(tokenObject)) {
+    tokenObject = await pipefy.generateAccessToken();
+    accessToken = tokenObject.access_token;
+  }
+
+  const labels = await pipefy.findLabels(accessToken, pipeId3RD);
+
+  let grade = 0;
+
+  if (formFields.parentesco?.value === "Pai/Mãe") {
+    grade += 1;
+  }
+
+  if (formFields.parentesco?.value === "Avô/Avó") {
+    grade += 1;
+  }
+
+  if (formFields.parentesco?.value === "Bisavô/Bisavó") {
+    grade += 1;
+  }
+
+  if (formFields.parentesco?.value === "Trisavô ou mais") {
+    grade += 1;
+  }
 
   if (formFields.documento?.value === "Sim") {
     grade += 1;
@@ -13,19 +48,21 @@ function gradeCalculator(formFields) {
     grade += 1;
   }
 
-  switch (formFields.processo?.value) {
-    case "6 meses":
-      grade += 1;
-      break;
-    case "3 meses":
-      grade += 2;
-      break;
-    case "0 à 60 dias ":
-      grade += 3;
-      break;
+  if (formFields.processo?.value === "3 Meses") {
+    grade += 2;
   }
 
-  return grade;
+  if (formFields.processo?.value === "6 Meses") {
+    grade += 1;
+  }
+
+  if (formFields.processo?.value === "0 à 60 dias") {
+    grade += 3;
+  }
+
+  const label = labels.find((label) => label.name === `Lead Nota ${grade}`);
+
+  return label.id;
 }
 
 function getAnswers(formFields) {
@@ -52,35 +89,3 @@ export const helpers = {
   gradeCalculator,
   getAnswers,
 };
-
-// {
-//   nome: '431241',
-//   contato: 423141323,
-//   grauDeParentesco: '423141',
-//   possuiDocumento: '314341',
-//   conheceAViaJudicial: '3424',
-//   quantasPessoasTemInteresse: '352',
-//   quandoPretendeIniciar: 'Q352252',
-//   null: '5235'
-// }
-// {
-//   quandoPretendeIniciar: 'Em 6+ meses',
-//   quantasPessoasTemInteresse: '5 à 7',
-//   possuiDocumento: 'Não',
-//   nome: 'Teste Nome cmpleto',
-//   grauDeParentesco: 'Outros',
-//   conheceAViaJudicial: 'Sim',
-//   contato: 139999999,
-//   chat_id: '3E6B18829AC9704F90FEF6D7C2AECF1E-29bdc8e8-a18f-4abe-b74f-4de14793b8a0',
-//   contact_name: '',
-//   contact_phone: '',
-//   contact_email: '',
-//   contact_gender: '',
-//   contact_birthday: '',
-//   contact_job_title: '',
-//   contact_org_name: '',
-//   contact_org_state: '',
-//   contact_org_city: '',
-//   whatsappPhone: '',
-//   whatsappName: '',
-//   contextId: '3E6B18829AC9704F90FEF6D7C2AECF1E-29bdc8e8-a18f-4abe-b74f-4de14793b8a0'

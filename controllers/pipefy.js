@@ -121,11 +121,11 @@ async function createNewCard(acessToken, pipeId, leadObject) {
                 },
                 {
                     field_id: "sele_o_de_etiqueta"
-                    field_value:  "${leadObject.label}"
+                    field_value: ${leadObject.label}
                 },
                 {
                     field_id: "reuni_o"
-                    field_value:  "${leadObject.meet}"
+                    field_value: "${leadObject.meet}"
                 },
               ]
             }) {
