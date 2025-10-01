@@ -26,7 +26,7 @@ const campaigns = startForm[2].options;
 //Grade Labels
 const labels = await pipefy.findLabels(accessToken, pipeId);
 
-const SDRArray = ["306993647", "306993651"];
+// const SDRArray = ["306993647", "306993651"];
 // 306993647 = Luiz Felipe Oliveira Silva
 // 306993651 = Luiz Henrique Silva
 
@@ -89,8 +89,8 @@ app.post("/api/v1/newLead", async (req, res) => {
   let gradeLabel = "";
 
   // SDR Consultant Logic
-  let firstSDRConsultant = helpers.randomize(SDRArray);
-  let SDRConsultant = firstSDRConsultant;
+  // let firstSDRConsultant = helpers.randomize(SDRArray);
+  // let SDRConsultant = firstSDRConsultant;
 
   // Service Logic || Theres is only one CP Landing page
   const service = newLead.form.id === "2e1ae2f" ? "CP" : "CI";
@@ -123,11 +123,7 @@ app.post("/api/v1/newLead", async (req, res) => {
     service: [service],
     deceased: `${formFields.parentesco?.value}`,
     numberOfApplicants: formFields.interesse?.value || 1,
-    SDRConsultant: [
-      SDRConsultant === firstSDRConsultant
-        ? helpers.randomize(SDRArray)
-        : SDRConsultant,
-    ],
+    SDRConsultant: [306844193],
     info: `${helpers.getAnswers(formFields)}`,
     email: `${formFields.email?.value}`,
     firstContact: `${formattedDate}`,
@@ -144,8 +140,8 @@ app.post("/api/v1/newLead", async (req, res) => {
   }
 
   //Update First Consultant to avoid repetition
-  firstSDRConsultant = lead.SDRConsultant;
-  SDRConsultant = helpers.randomize(SDRArray);
+  // firstSDRConsultant = lead.SDRConsultant;
+  // SDRConsultant = helpers.randomize(SDRArray);
 
   const cardResponseTerceiro = await pipefy.createNewCard(
     accessToken,
@@ -181,3 +177,8 @@ app.post("/api/v1/manychat", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+//SDR logic
+//  SDRConsultant === firstSDRConsultant
+//         ? helpers.randomize(SDRArray)
+//         : SDRConsultant,
