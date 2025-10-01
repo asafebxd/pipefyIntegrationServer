@@ -42,8 +42,6 @@ app.get("/", (req, res) => {
   res.json("Server Running");
 });
 
-console.log(await pipefy.findPhases(accessToken, pipeId3RD));
-
 app.post("/api/v1/newLeadByAgent", async (req, res) => {
   console.log(req.body);
   const newLead = req.body;
@@ -95,7 +93,7 @@ app.post("/api/v1/newLead", async (req, res) => {
   let SDRConsultant = firstSDRConsultant;
 
   // Service Logic || Theres is only one CP Landing page
-  const service = newLead.form_id === "2b53029" ? "CP" : "CI";
+  const service = newLead.form.id === "2e1ae2f" ? "CP" : "CI";
 
   //Grade label logic
   if (leadGrade === 1) {
@@ -116,7 +114,7 @@ app.post("/api/v1/newLead", async (req, res) => {
 
   const lead = {
     name: `${formFields.nome?.value}`,
-    phoneNumber: `${formFields.whatsapp?.value}`,
+    phoneNumber: `+55${(formFields?.whatsapp.value).replace(/[^0-9]/g, "")}`,
     campaign: [
       campaigns.includes(formFields.utm_campaign?.value)
         ? formFields.utm_campaign.value
