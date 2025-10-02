@@ -11,5 +11,6 @@ jobs:
         run: |
           echo "PIPEFY_CLIENT_ID=${{ secrets.PIPEFY_CLIENT_ID }}" >> .env
           echo "PIPEFY_CLIENT_SECRET=${{ secrets.PIPEFY_CLIENT_SECRET }}" >> .env
+          echo "PIPEFY_3RD_SDR_PIPE_ID=${{ secrets.PIPEFY_3RD_SDR_PIPE_ID }}" >> .env
       - name: Run tests
         run: npm run test
