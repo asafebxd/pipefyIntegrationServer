@@ -78,7 +78,7 @@ app.post("/api/v1/newLead", async (req, res) => {
   }
 
   // Campaigns array
-  const startForm = await pipefy.fetchFieldsData(accessToken, pipeId);
+  const startForm = await pipefy.fetchFieldsData(accessToken, pipeId3RD);
   const campaigns = startForm[2].options;
 
   // SDR Consultant Logic

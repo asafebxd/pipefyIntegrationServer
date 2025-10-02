@@ -30,12 +30,12 @@ function isTokenExpired(token) {
   return Date.now() >= expiresAt;
 }
 
-async function fetchFieldsData(acessToken, pipeId) {
+async function fetchFieldsData(accessToken, pipeId) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${acessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -65,12 +65,12 @@ async function fetchFieldsData(acessToken, pipeId) {
   return pipeData;
 }
 
-async function createNewCard(acessToken, pipeId, leadObject) {
+async function createNewCard(accessToken, pipeId, leadObject) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${acessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -138,19 +138,19 @@ async function createNewCard(acessToken, pipeId, leadObject) {
       `,
     }),
   });
-  console.log("Status code: ", res.status);
+  console.log("Create Status code: ", res.status);
 
   const resBody = await res.json();
 
-  return JSON.stringify(resBody);
+  return resBody.data;
 }
 
-async function createNewCardInstragramDM(acessToken, pipeId, leadObject) {
+async function createNewCardInstragramDM(accessToken, pipeId, leadObject) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${acessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -185,19 +185,45 @@ async function createNewCardInstragramDM(acessToken, pipeId, leadObject) {
       `,
     }),
   });
-  console.log("Status code: ", res.status);
+  console.log("Create Status code: ", res.status);
 
   const resBody = await res.json();
 
-  return JSON.stringify(resBody);
+  return resBody.data;
 }
 
-async function findLabels(acessToken, pipeId) {
+async function deleteCard(accessToken, cardId) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${acessToken}`,
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({
+      query: `
+        mutation {
+            deleteCard(input: {
+              id: ${cardId}
+            }) {
+                success
+              }   
+        }
+      `,
+    }),
+  });
+  console.log("Delete Status code:", res.status);
+
+  const resBody = await res.json();
+
+  return resBody.data;
+}
+
+async function findLabels(accessToken, pipeId) {
+  const res = await fetch("https://api.pipefy.com/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -220,12 +246,12 @@ async function findLabels(acessToken, pipeId) {
   return labels;
 }
 
-async function findPhases(acessToken, pipeId) {
+async function findPhases(accessToken, pipeId) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${acessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -248,12 +274,12 @@ async function findPhases(acessToken, pipeId) {
   return phases;
 }
 
-async function findMembers(acessToken, pipeId) {
+async function findMembers(accessToken, pipeId) {
   const res = await fetch("https://api.pipefy.com/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${acessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -283,6 +309,7 @@ export const pipefy = {
   isTokenExpired,
   createNewCard,
   createNewCardInstragramDM,
+  deleteCard,
   fetchFieldsData,
   findLabels,
   findPhases,
