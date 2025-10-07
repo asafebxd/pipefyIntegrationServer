@@ -298,6 +298,12 @@ describe("Test if posts endpoints are working properly", () => {
       telefone: "1399998888",
     };
 
+    //IsTokenExpired returns false to valid tokens
+    if (pipefy.isTokenExpired(tokenObject)) {
+      tokenObject = await pipefy.generateAccessToken();
+      accessToken = tokenObject.access_token;
+    }
+
     const lead = {
       name: newLead?.name,
       phoneNumber: `+${newLead?.telefone}`,
