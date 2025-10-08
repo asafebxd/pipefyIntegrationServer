@@ -64,7 +64,7 @@ app.post("/api/v1/newLeadByAgent", async (req, res) => {
   console.log(cardResponse);
 
   const tintinResponse = await helpers.sendBody(
-    newLead.fisrt_message,
+    newLead?.first_message,
     newLead?.whatsappPhone
   );
   console.log(tintinResponse);
