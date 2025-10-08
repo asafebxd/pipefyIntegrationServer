@@ -98,8 +98,11 @@ async function sendBody(first_message, phone_number) {
       }),
     }
   );
+  console.log("res status: ", res.status);
 
-  return res.status;
+  const resBody = await res.json();
+
+  return resBody;
 }
 
 export const helpers = {

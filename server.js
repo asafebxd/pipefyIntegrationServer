@@ -67,7 +67,7 @@ app.post("/api/v1/newLeadByAgent", async (req, res) => {
     newLead.fisrt_message,
     newLead?.whatsappPhone
   );
-  console.log();
+  console.log(tintinResponse);
 
   res.sendStatus(200);
 });
