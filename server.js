@@ -63,6 +63,12 @@ app.post("/api/v1/newLeadByAgent", async (req, res) => {
   const cardResponse = await pipefy.createNewCard(accessToken, pipeId3RD, lead);
   console.log(cardResponse);
 
+  const tintinResponse = await helpers.sendBody(
+    newLead.fisrt_message,
+    newLead?.whatsappPhone
+  );
+  console.log();
+
   res.sendStatus(200);
 });
 

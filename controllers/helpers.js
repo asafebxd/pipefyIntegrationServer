@@ -84,8 +84,27 @@ function getAnswers(formFields) {
   return info;
 }
 
+async function sendBody(first_message, phone_number) {
+  const res = await fetch(
+    `https://integracoes.tintim.app/webhook/833ad51a-c552-41ce-8517-813973ef03f1`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        first_message: first_message,
+        phone_number: phone_number,
+      }),
+    }
+  );
+
+  return res.status;
+}
+
 export const helpers = {
   randomize,
   gradeCalculator,
   getAnswers,
+  sendBody,
 };
