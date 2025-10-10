@@ -63,12 +63,6 @@ app.post("/api/v1/newLeadByAgent", async (req, res) => {
   const cardResponse = await pipefy.createNewCard(accessToken, pipeId3RD, lead);
   console.log(cardResponse);
 
-  const tintinResponse = await helpers.sendBody(
-    newLead?.first_message,
-    newLead?.whatsappPhone
-  );
-  console.log(tintinResponse);
-
   res.sendStatus(200);
 });
 
@@ -157,6 +151,16 @@ app.post("/api/v1/manychat", async (req, res) => {
   console.log(cardResponse);
 
   res.sendStatus(200);
+});
+
+app.post("/api/v1/tintin", async (req, res) => {
+  const newLead = req.body;
+
+  const tintinResponse = await helpers.sendBody(
+    newLead?.first_message,
+    newLead?.whatsappPhone
+  );
+  console.log(tintinResponse);
 });
 
 app.listen(port, () => {

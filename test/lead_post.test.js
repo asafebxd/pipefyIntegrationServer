@@ -238,6 +238,8 @@ describe("Test if posts endpoints are working properly", () => {
       service: "CI",
       applicants: 3,
       name: "Jest Test2",
+      first_message:
+        "Olá, vim pela página da campanha euro congelado e quero furar a fila do atendimento.",
       chat_id: "3E7EE7D6B964C0FFD3A36ECD0F6844AF-5528999931657",
       contact_name: "João Vitor Vasco",
       contact_phone: "5528999931657",
