@@ -39,6 +39,12 @@ app.post("/api/v1/newLeadByAgent", async (req, res) => {
   console.log(req.body);
   const newLead = req.body;
 
+  const tintinResponse = await helpers.sendBody(
+    newLead?.first_message,
+    newLead?.whatsappPhone
+  );
+  console.log("tintin:", tintinResponse);
+
   //IsTokenExpired returns false to valid tokens
   if (pipefy.isTokenExpired(tokenObject)) {
     tokenObject = await pipefy.generateAccessToken();
@@ -151,16 +157,6 @@ app.post("/api/v1/manychat", async (req, res) => {
   console.log(cardResponse);
 
   res.sendStatus(200);
-});
-
-app.post("/api/v1/tintin", async (req, res) => {
-  const newLead = req.body;
-
-  const tintinResponse = await helpers.sendBody(
-    newLead?.first_message,
-    newLead?.whatsappPhone
-  );
-  console.log(tintinResponse);
 });
 
 app.listen(port, () => {
